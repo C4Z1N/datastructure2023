@@ -89,7 +89,10 @@ void enqueue(struct queue* q, int item) {
 }
 
 int dequeue(struct queue* q) {
-	if (isEmpty(q))	return;
+	if (isEmpty(q)) {
+		printf("공백 상태, 명령 무시됨\n");
+		return;
+	}
 	if (q->front == MAX_SIZE - 1) q->front = -1;
 	q->count--;
 	q->data[++q->front] = 0;
