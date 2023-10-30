@@ -1,3 +1,2 @@
 # datastructure2023
-제한된 자릿수를 지키지 않아도 출력은 되지만,
-출력이 깨져서 된다
+Visual Studio 2022에서 동작
