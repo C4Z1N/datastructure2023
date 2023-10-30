@@ -1,0 +1,115 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_SIZE 16
+
+int w = 5;
+
+struct queue {
+	int data[MAX_SIZE];
+	int front, rear;
+	int count;
+};
+
+void init_queue(struct queue* q) {
+	q->front = 0;
+	q->rear = 0;
+	q->count = 0;
+	for (int i = 0; i < MAX_SIZE; i++) {
+		q->data[i] = 0;
+	}
+}
+
+int isEmpty(struct queue* q) {
+	return (q->front == q->rear) && q->count == 0;
+}
+
+int isFull(struct queue* q) {
+	return (q->front == q->rear) && q->count == MAX_SIZE;
+}
+
+void print_queue(struct queue* q) {
+	int G[5][5] = {
+		{0, 1, 2, 3, 4},
+		{15, 16, 16, 16, 5},
+		{14, 16, 16, 16, 6},
+		{13, 16, 16, 16, 7},
+		{12, 11, 10, 9, 8}
+	};
+	int m = q->front;
+	int o = 0;
+	for (int lm = 0; lm < w; lm++) {
+		for (int k = 0; k < w; k++) {
+			if (G[lm][k] >= MAX_SIZE) printf("        ");
+			else printf("┌─ %02d─┐ ", G[lm][k]);
+		}
+		printf("\n");
+		for (int k = 0; k < w; k++) {
+			if (G[lm][k] >= MAX_SIZE) printf("        ");
+			else {
+				printf("│ %04d│ ", q->data[G[lm][k]]);
+			}
+		}
+		printf("\n");
+		for (int k = 0; k < w; k++) {
+			if (G[lm][k] >= MAX_SIZE) printf("        ");
+			else printf("└ ─ ─ ┘ ");
+		}
+		printf("\n");
+	}
+	printf("Front: %d\nRear: %d\n\n", q->front, q->rear);
+}
+
+void enqueue(struct queue* q, int item) {
+	if (isFull(q)) {
+		printf("포화 상태, 명령 무시됨\n");
+		return;
+	}
+	if (q->rear == MAX_SIZE - 1) q->rear = -1;
+	q->data[++q->rear] = item;
+	q->count++;
+}
+
+int dequeue(struct queue* q) {
+	if (isEmpty(q))	return;
+	if (q->front == MAX_SIZE - 1) q->front = -1;
+	q->count--;
+	q->data[++q->front] = 0;
+	return q->data[q->front];
+}
+
+int main() {
+	struct queue q;
+	init_queue(&q);
+	char enq[] = "enqueue";
+	char deq[] = "dequeue";
+	char command[8];
+	char a[4];
+	int k;
+	int j = 0;
+	printf("%d칸\n추가: enqueue 입력 후 값 입력\n삭제: dequeue\n\n값은 항상 %d자리 이하의 정수, 시작할 때 dequeue 불가능\n\n", MAX_SIZE, w - 1);
+	while (1) {
+		scanf("%s", command);
+		if (strcmp(command, enq) == 0) {
+			scanf("%s", a);
+			long int r;
+			char* endptr;
+			r = strtol(a, &endptr, 10);
+			if (*endptr == '\0') enqueue(&q, r);
+			print_queue(&q);
+			j++;
+		}
+		else if (strcmp(command, deq) == 0) {
+			if (j > 0) {
+				dequeue(&q);
+				print_queue(&q);
+			}
+			else printf("안된다니까\n");
+		}
+		else printf("잘못된 명령\n");
+	}
+
+	return 0;
+}
