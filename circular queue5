@@ -94,6 +94,10 @@ int main() {
 		scanf("%s", command);
 		if (strcmp(command, enq) == 0) {
 			scanf("%s", a);
+			if (strlen(a) > (w - 1)) {
+				printf("너무 큰 수\n");
+				continue;
+			}
 			long int r;
 			char* endptr;
 			r = strtol(a, &endptr, 10);
